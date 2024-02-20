@@ -134,6 +134,7 @@ pub fn add_branch(branches: &mut BTreeMap<u32, Vec<bool>>, line_no: u32, no: u32
 
 pub fn parse_lcov(
     buffer: Vec<u8>,
+    functions_enabled:bool,
     branch_enabled: bool,
 ) -> Result<Vec<(String, CovResult)>, ParserError> {
     let mut cur_file = None;

@@ -273,6 +273,7 @@ pub fn gen_index(
     global: &HtmlGlobalStats,
     conf: &Config,
     output: &Path,
+    functions_enabled: bool,
     branch_enabled: bool,
     precision: usize,
 ) {
@@ -295,6 +296,7 @@ pub fn gen_index(
     ctx.insert("precision", &precision);
     ctx.insert("items", &global.dirs);
     ctx.insert("kind", "Directory");
+    ctx.insert("functions_enabled", &functions_enabled);
     ctx.insert("branch_enabled", &branch_enabled);
 
     let out = tera.render("index.html", &ctx).unwrap();
@@ -311,6 +313,7 @@ pub fn gen_index(
             dir_stats,
             conf,
             output,
+            functions_enabled,
             branch_enabled,
             precision,
         );
@@ -323,6 +326,7 @@ pub fn gen_dir_index(
     dir_stats: &HtmlDirStats,
     conf: &Config,
     output: &Path,
+    functions_enabled: bool,
     branch_enabled: bool,
     precision: usize,
 ) {
@@ -347,6 +351,7 @@ pub fn gen_dir_index(
     ctx.insert("stats", &dir_stats.stats);
     ctx.insert("items", &dir_stats.files);
     ctx.insert("kind", "File");
+    ctx.insert("functions_enabled", &functions_enabled);
     ctx.insert("branch_enabled", &branch_enabled);
     ctx.insert("precision", &precision);
 
@@ -365,6 +370,7 @@ fn gen_html(
     output: &Path,
     rel_path: &Path,
     global: Arc<Mutex<HtmlGlobalStats>>,
+    functions_enabled: bool,
     branch_enabled: bool,
     precision: usize,
 ) {
@@ -410,6 +416,7 @@ fn gen_html(
         ],
     );
     ctx.insert("stats", &stats);
+    ctx.insert("functions_enabled", &functions_enabled);
     ctx.insert("branch_enabled", &branch_enabled);
     ctx.insert("precision", &precision);
 
@@ -458,6 +465,7 @@ pub fn consumer_html(
     global: Arc<Mutex<HtmlGlobalStats>>,
     output: &Path,
     conf: Config,
+    functions_enabled: bool,
     branch_enabled: bool,
     precision: usize,
 ) {
@@ -474,6 +482,7 @@ pub fn consumer_html(
             output,
             &job.rel_path,
             global.clone(),
+            functions_enabled,
             branch_enabled,
             precision,
         );

@@ -436,6 +436,7 @@ impl Gcno {
         stem: &str,
         gcno_buf: Vec<u8>,
         gcda_bufs: Vec<Vec<u8>>,
+        functions_enabled: bool,
         branch_enabled: bool,
     ) -> Result<Vec<(String, CovResult)>, GcovReaderError> {
         let mut gcno = Self::new();
@@ -444,7 +445,7 @@ impl Gcno {
             gcno.read(FileType::Gcda, gcda_buf, stem)?;
         }
         gcno.stop();
-        Ok(gcno.finalize(branch_enabled))
+        Ok(gcno.finalize(functions_enabled, branch_enabled))
     }
 
     pub fn stop(&mut self) {
@@ -856,7 +857,7 @@ impl Gcno {
         Ok(())
     }
 
-    pub fn finalize(&mut self, branch_enabled: bool) -> Vec<(String, CovResult)> {
+    pub fn finalize(&mut self, functions_enabled: bool, branch_enabled: bool) -> Vec<(String, CovResult)> {
         let mut results: FxHashMap<&str, CovResult> = FxHashMap::default();
         for fun in &mut self.functions {
             fun.add_line_count();

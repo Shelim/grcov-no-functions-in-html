@@ -172,6 +172,7 @@ pub fn consumer(
     source_dir: Option<&Path>,
     result_map: &SyncCovResultMap,
     receiver: JobReceiver,
+    functions_enabled:bool,
     branch_enabled: bool,
     guess_directory: bool,
     binary_path: Option<&Path>,
@@ -188,7 +189,7 @@ pub fn consumer(
                 match work_item.item {
                     ItemType::Path((stem, gcno_path)) => {
                         // GCC
-                        if let Err(e) = run_gcov(&gcno_path, branch_enabled, working_dir) {
+                        if let Err(e) = run_gcov(&gcno_path, functions_enabled, branch_enabled, working_dir) {
                             error!("Error when running gcov: {}", e);
                             continue;
                         };
@@ -250,6 +251,7 @@ pub fn consumer(
                             &buffers.stem,
                             buffers.gcno_buf,
                             buffers.gcda_buf,
+                            functions_enabled,
                             branch_enabled,
                         ) {
                             Ok(mut r) => {
@@ -292,7 +294,7 @@ pub fn consumer(
 
                             for lcov in lcovs {
                                 new_results.append(&mut try_parse!(
-                                    parse_lcov(lcov, branch_enabled),
+                                    parse_lcov(lcov, functions_enabled, branch_enabled),
                                     work_item.name
                                 ));
                             }
@@ -312,7 +314,7 @@ pub fn consumer(
             ItemFormat::Info | ItemFormat::JacocoXml => {
                 if let ItemType::Content(content) = work_item.item {
                     if work_item.format == ItemFormat::Info {
-                        try_parse!(parse_lcov(content, branch_enabled), work_item.name)
+                        try_parse!(parse_lcov(content, functions_enabled, branch_enabled), work_item.name)
                     } else {
                         let buffer = BufReader::new(Cursor::new(content));
                         try_parse!(parse_jacoco_xml_report(buffer), work_item.name)

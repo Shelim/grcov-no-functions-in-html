@@ -203,6 +203,9 @@ struct Opt {
     keep_dir: Vec<String>,
     #[arg(long, value_name = "PATH")]
     path_mapping: Option<PathBuf>,
+    /// Enables parsing function coverage information.
+    #[arg(long)]
+    functions: bool,
     /// Enables parsing branch coverage information.
     #[arg(long)]
     branch: bool,
@@ -424,6 +427,7 @@ fn main() {
         let working_dir = tmp_path.join(format!("{}", i));
         let source_root = source_root.clone();
         let binary_path = opt.binary_path.clone();
+        let functions_enabled = opt.functions;
         let branch_enabled = opt.branch;
         let guess_directory = opt.guess_directory;
 
@@ -436,6 +440,7 @@ fn main() {
                     source_root.as_deref(),
                     &result_map,
                     receiver,
+                    functions_enabled,
                     branch_enabled,
                     guess_directory,
                     binary_path.as_deref(),
@@ -554,6 +559,7 @@ fn main() {
                 results,
                 output_path.as_deref(),
                 num_threads,
+                opt.functions,
                 opt.branch,
                 opt.output_config_file.as_deref(),
                 opt.precision,

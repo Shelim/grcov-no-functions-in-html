@@ -523,6 +523,7 @@ pub fn output_html(
     results: &[ResultTuple],
     output_dir: Option<&Path>,
     num_threads: usize,
+    functions_enabled: bool,
     branch_enabled: bool,
     output_config_file: Option<&Path>,
     precision: usize,
@@ -563,6 +564,7 @@ pub fn output_html(
                     stats,
                     &output,
                     config,
+                    functions_enabled,
                     branch_enabled,
                     precision,
                 );
@@ -594,7 +596,7 @@ pub fn output_html(
 
     let global = Arc::try_unwrap(stats).unwrap().into_inner().unwrap();
 
-    html::gen_index(&tera, &global, &config, &output, branch_enabled, precision);
+    html::gen_index(&tera, &global, &config, &output, functions_enabled, branch_enabled, precision);
 
     for style in html::BadgeStyle::iter() {
         html::gen_badge(&tera, &global.stats, &config, &output, style);

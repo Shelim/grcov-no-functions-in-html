@@ -34,6 +34,7 @@ fn get_gcov() -> String {
 
 pub fn run_gcov(
     gcno_path: &Path,
+    functions_enabled: bool,
     branch_enabled: bool,
     working_dir: &Path,
 ) -> Result<(), GcovToolError> {

@@ -10,7 +10,9 @@
             <tr>
                 <th>{{ kind }}</th>
                 <th class="has-text-centered" colspan="3">Line Coverage</th>
+                {% if functions_enabled %}
                 <th class="has-text-centered" colspan="2">Functions</th>
+                {% endif %}
                 {% if branch_enabled %}
                     <th class="has-text-centered" colspan="2">Branches</th>
                 {% endif %}
