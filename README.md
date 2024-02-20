@@ -1,3 +1,16 @@
+# Fork information
+
+Added a new command line switch for enabling (or disabling) parsing function coverage information.
+
+In current state the function coverage information is very misleading stat for Rust projects, so it can be explicity disabled in this fork.
+
+To use:
+
+- Clone to your local drive
+- Run `cargo build --release`
+
+---
+
 # grcov
 
 [![Build Status](https://github.com/mozilla/grcov/actions/workflows/CICD.yml/badge.svg?branch=master)](https://github.com/mozilla/grcov/actions/workflows/CICD.yml)
